@@ -1,4 +1,4 @@
-# Proyecto restaurante
+# Proyecto Web
 
 Proyecto para la materia de Desarrollo de servicios y aplicaciones web ITESO Otoño 2019 .
 
@@ -15,31 +15,20 @@ Es un pqueño proyecto de un mini sistema para un restaurante
 
 ### Installing
 
-* Git clone ...
-* npm i
+
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
-```
-npm start
-```
 
 ## Authors
 
 Contributors names and contact info
 
  [@CardeDeveloper](https://github.com/CardeDeveloper)
- [@joaquin100](https://github.com/joaquin100)
  [@Jlsraa](https://github.com/Jlsraa)
 
 ## Version History
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
     * Initial Release
 
 ## License
