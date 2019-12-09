@@ -8,7 +8,7 @@ mongoose.set('useCreateIndex', true);
 
 mongoose.set('useUnifiedTopology', true);
 //Set up default mongoose connection
-var mongoDB = 'mongodb://localhost/DASW2019'
+var mongoDB = 'mongodb+srv://is723302:jra723302@clusterweb-jqsqh.mongodb.net/test?retryWrites=true&w=majority'
 mongoose.connect(mongoDB);
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;

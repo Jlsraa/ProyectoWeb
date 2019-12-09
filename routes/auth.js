@@ -5,6 +5,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 router.post('/', function(req,res,next){
+		console.log(req.body);
+	if(!req.body.email || !req.body.password){
+        res.status(400).json({status: "error", message: "you should send email and password", data: null});
+        next(err);
+    }
     userModel.findOne({email:req.body.email}, function(err, userInfo){
         if(err){
             next(err);
@@ -13,6 +18,9 @@ router.post('/', function(req,res,next){
                 res.status(400).json({status: "error", message: "you should send email and password", data: null});
                 next(err);
             }
+			if(!(userInfo))
+				res.status(401).json({status: "error", message: "Invalid email/password", data: null});
+			else
             if(bcrypt.compareSync(req.body.password, userInfo.password)){
                 const token = jwt.sign({id: userInfo._id, type: userInfo.type}, req.app.get('secretKey'), {expiresIn: '1h'});
                 res.json({status: "succes", message: "user found!!", data: {user: userInfo, token:token}});

@@ -14,12 +14,6 @@ var Schema = mongoose.Schema
         trim: true, unique: true,
         match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     },
-    type:{
-        type:Number,
-        default: 0 // 0 mesero || 1 admin
-
-    },
-    url_image:{type:String},
     created_at: { type: Date, default: Date.now },
   });
 

@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <title>Lista de Peliculas</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap CSS -->
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<style>
+		label{
+			color:grey;
+		}
+		input[type = "radio"]{ 
+			display:none;
+		}
+		.clasificacion{
+		direction: rtl;/* right to left */
+		unicode-bidi: bidi-override;/* bidi de bidireccional */
+		}
+		label:hover{
+			color:orange;
+		}
+		
+		label:hover ~ label{
+			color:orange;
+		}
+		input[type = "radio"]:checked ~ label{
+			color:orange;
+			}
+
+	</style>
+  </head>
+  <body>
+        <%- include('../navbar'); %>
+        <section class="container">
+            <div class="input-group input-group-sm mb-3 mt-3 col-12">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
+                </div>
+
+                <input id = "search" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+
+            <div class="row">
+                <p class="col"></p>
+                <h2 class="text-center col">Películas</h2>
+                <button onclick="nuevaPelicula()" type="button" class="btn btn-info col">Nueva Película</button>
+            </div>
+            
+            <div class="d-flex justify-content-md-center align-items-md-center" id="table-content">
+                <table class="table table-striped col-12 col-md-12" id="tableProducts">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titulo</th>
+                            <th scope="col">Autores</th>
+                            <th scope="col">Fecha de publicación</th>
+							<th scope="col">Calificación </th>
+                        </tr>
+                    </thead>
+                    <tbody id = "bodyTable">                       
+                    </tbody>
+                </table>         
+            </div>
+
+            <div>
+               
+            </div>
+
+            <footer class="d-flex justify-content-center">
+                    <nav class="row mt-3 " aria-label="Page navigation">
+                            <ul id="pagination" class="pagination">
+                              <li class="page-item"><a id="btn_prev" class="page-link" href="#">Previous</a></li>
+                             
+                              <li class="page-item"><a id="btn_next" class="page-link" href="#">Next</a></li>
+                            </ul>
+                    </nav>
+            </footer>
+
+        </section>
+
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Eliminando una película</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                    </div>
+                    <div class="modal-footer">
+                      <button id = "cancelar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                      <button id = "eliminarPelicula" type="button" class="btn btn-primary">Eliminar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+
+        let btnCancelar = document.getElementById("cancelar");
+
+        btnCancelar.onclick = permanecer;
+
+        function permanecer(){
+            window.location.href = "/peliculas";
+        }
+
+        var peliculas = [];
+
+        var peliculasBackUp = [];
+
+        var tablapeliculas = [];
+        var current_page = 0
+        var records_per_page = 3;
+
+        var search = document.getElementById("search");
+
+        search.onkeyup = filtrado;
+
+        function filtrado(event){
+            console.log(search.value)
+            peliculas = peliculasBackUp.filter((pelicula) => {
+                return pelicula.tittle.toUpperCase().trim().includes(search.value.toUpperCase().trim());
+            })
+            if(search.value == ""){
+
+                //console.log("Entré if");
+                //console.log(peliculas);
+
+                cargarPeliculas(peliculas)
+                loadPagination();
+                changePage(1);
+
+                window.location.href = "/peliculas";
+                
+
+            }else{
+                //console.log("Entré else");
+                //console.log(peliculas);
+
+                loadPagination();
+                changePage(1);
+
+                loadHtml(peliculas);
+            }
+            
+        }
+
+
+        //var btn_next = document.getElementById("btn_next");
+        //var btn_prev = document.getElementById("btn_prev");
+
+        //btn_next.onclick = nextPage
+        //btn_prev.onclick = prevPage
+
+        function editarPelicula(id){
+            window.location.href = 'editar?id='+id;
+        }
+
+        function nuevaPelicula(){
+            window.location.href = "/peliculas/nueva";
+        }
+
+        function cargarPeliculas(peliculas){
+		console.log(peliculas);
+            peliculas.forEach(function(movie,index){
+
+                let prod = {};
+
+            let tdId = document.createElement('td');
+            let tdName = document.createElement('td');
+            let tdauthor = document.createElement('td');
+            let tdPublished = document.createElement('td');
+			let tdCalification = document.createElement('td');
+            let tdAcciones= document.createElement('td');
+			let newRow = document.createElement('tr');
+		
+            //console.log("Entre",index);
+
+            tdId.innerText = index + 1;
+            tdName.innerText = movie.tittle;
+            tdauthor.innerText = movie.author;
+            tdAcciones.innerHTML = 
+            `<button onclick="editarPelicula()" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>`;
+            /*newRow.appendChild(tdId);
+            newRow.appendChild(tdName);
+            newRow.appendChild(tdauthor);
+            newRow.appendChild(tdAcciones);
+
+            tbody.appendChild(newRow);
+
+            tbody.hidden = true;*/
+            
+            prod.id = tablapeliculas.length+1;
+            prod.name = movie.name;
+            prod.cantidad = movie.quantity;
+            prod.acciones = `<button onclick="editarPelicula()" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>`;
+            
+            tablapeliculas.push(movie);
+
+            //console.log(tablapeliculas);
+
+
+            });
+        }
+
+        function prevPage(){ 
+            if (current_page > 1) {
+            current_page--;
+            changePage(current_page);
+            }
+        }
+
+        function nextPage(){
+            if (current_page < numPages()) {
+                current_page++;
+                changePage(current_page);
+            }
+        }
+        function mostrarPeliculas(movie){
+					if(movie.calification==5){
+						var rating=`<p class="clasificacion">
+							<input id="radio1" type="radio" name="estrellas" checked value="5"><!--
+							--><label for="radio1" >★</label><!--
+							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><label for="radio2">★</label><!--
+							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><label for="radio3">★</label><!--
+							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><label for="radio4">★</label><!--
+							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><label for="radio5">★</label>
+						  </p></td>`
+					}
+					if(movie.calification==4){
+						var rating=`<p class="clasificacion">
+							<input id="radio1" type="radio" name="estrellas" value="5"><!--
+							--><label for="radio1 ">★</label><!--
+							--><input id="radio2" checked type="radio" name="estrellas" value="4"><!--
+							--><label for="radio2">★</label><!--
+							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><label for="radio3">★</label><!--
+							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><label for="radio4">★</label><!--
+							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><label for="radio5">★</label>
+						  </p></td>`
+					}
+					if(movie.calification==3){
+						var rating=`<p class="clasificacion">
+							<input id="radio1" type="radio" name="estrellas" value="5"><!--
+							--><label for="radio1 ">★</label><!--
+							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><label for="radio2">★</label><!--
+							--><input id="radio3" checked type="radio" name="estrellas" value="3"><!--
+							--><label for="radio3">★</label><!--
+							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><label for="radio4">★</label><!--
+							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><label for="radio5">★</label>
+						  </p></td>`
+					}
+					if(movie.calification==2){
+						var rating=`<p class="clasificacion">
+							<input id="radio1" type="radio" name="estrellas" value="5"><!--
+							--><label for="radio1 checked">★</label><!--
+							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><label for="radio2">★</label><!--
+							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><label for="radio3">★</label><!--
+							--><input id="radio4" checked type="radio" name="estrellas" value="2"><!--
+							--><label for="radio4">★</label><!--
+							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><label for="radio5">★</label>
+						  </p></td>`
+					}
+					if(movie.calification==1){
+						var rating=`<p class="clasificacion">
+							<input id="radio1" type="radio" name="estrellas" checked value="5"><!--
+							--><label for="radio1 ">★</label><!--
+							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><label for="radio2">★</label><!--
+							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><label for="radio3">★</label><!--
+							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><label for="radio4">★</label><!--
+							--><input id="radio5" type="radio" checked name="estrellas" value="1"><!--
+							--><label for="radio5" >★</label>
+						  </p></td>`
+					}
+			console.log(rating);
+            return `<tr>
+            <td>${movie.tittle}</td>
+            <td>${movie.author}</td>
+			<td>${movie.published_at}</td>
+            <td>`+rating+`</td>
+            <a href = "/peliculas/editar?id=${movie._id}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+            <button data-target="#exampleModalLong" data-toggle="modal" id ="EliminandoPelicula" onclick="eliminarPelicula(${"'"+movie._id+"'"},${"'"+movie.tittle+"'"})" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+            </td>   
+            </tr>`
+        }
+
+        function eliminarPelicula(id,name){
+            console.log(id)
+            let textoModal = document.getElementById("modalBody");
+            textoModal.innerText = "¿Estás seguro de qué quieres eleminar la película "+ name +"?";
+            //console.log(id);
+
+            var btnEliminarPelícula = document.getElementById("eliminarPelicula");
+	
+           btnEliminarPelícula.addEventListener("click", (e) => {
+                //console.log(id);
+                var url = `/api/movies/${id}`;
+         
+
+                fetch(url, {
+                method: 'DELETE', // or 'PUT'
+                headers:{
+                    'Content-Type': 'application/json',
+                    'x-access-token': sessionStorage.getItem("token")
+                }
+                }).then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(response =>{
+                    console.log('Success:', response);
+                    alert("Se eliminó la pelicula " + name);
+                    location.reload();
+                });
+                })
+
+        }
+
+        
+
+
+
+        function changePage(page){   
+            let btn_next = document.getElementById("btn_next");
+            let btn_prev = document.getElementById("btn_prev");
+
+            // Validate page
+            if (page < 1) page = 1;
+            if (page > numPages()) page = numPages();
+
+            let movies_page= []
+
+            for (var i = (page-1) * records_per_page; i < (page * records_per_page); i++) {
+                if(tablapeliculas[i] != undefined){
+                    movies_page.push(tablapeliculas[i]);
+                    //console.log("peliculas page");
+                    //console.log(movies_page);
+                
+                }
+            }
+
+            loadHtml(movies_page);
+    
+            if (page == 1) {
+            // btn_prev.setAttribute("disabled","")
+                btn_prev.style.visibility = "hidden";
+            } else {
+                btn_prev.style.visibility = "visible";
+                //btn_prev.removeAttribute("disabled")
+            }
+
+            if (page == numPages()) {
+                
+                btn_next.style.visibility = "hidden";
+                //btn_next.setAttribute("disabled","")
+            } else {
+                btn_next.style.visibility = "visible";
+                //btn_next.removeAttribute("disabled")
+            }
+        }
+
+        function numPages()
+        {
+            return Math.ceil(peliculas.length / records_per_page);
+        }
+
+        function changePageCustom(page){
+            current_page = page;
+            changePage(current_page)
+        }
+
+        function loadPagination(){
+            let pagination = document.getElementById("pagination")
+            let pags= ""
+            for(i = 0 ; i<numPages() ; i++){
+                pags+=`<li class="page-item"><a onclick="changePageCustom(${i+1})" class="page-link" href="#">${i+1}</a></li>`
+            }
+
+            let str = `<li class="page-item"><button onclick="prevPage()" id="btn_prev" class="page-link" href="#">Anterior</button></li>
+            ${pags} <li class="page-item"><button onclick="nextPage()" id="btn_next" class="page-link" href="#">Siguiente</button></li>`
+  
+            pagination.innerHTML = str;
+        }
+
+        function loadHtml(movie){
+            let string= ""
+            let lista = document.getElementById("bodyTable")
+            movie.forEach(element => {
+            string+= mostrarPeliculas(element)
+        });
+    
+            lista.innerHTML = string;
+
+
+        }
+
+        
+		let email=sessionStorage.getItem('email');
+		var url = `/api/movies/list`;
+		movies = {
+					
+					email: sessionStorage.getItem('email'),
+				}
+        fetch(url,{
+                    method: 'POST', 
+                    body: JSON.stringify(movies), 
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'x-access-token': sessionStorage.getItem("token")
+                    }
+                })
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(data) {
+            console.log('data = ', data);
+            peliculas = JSON.parse(data).data.movies;
+            peliculasBackUp = peliculas;
+            cargarPeliculas(peliculas);
+
+
+
+            btn_next.onclick = nextPage;
+            btn_prev.onclick = prevPage;
+
+            loadPagination();
+            changePage(1);
+
+
+
+            })
+            .catch(function(err) {
+            console.error(err);
+        });
+
+        //console.log(peliculas.length)
+       
+
+    </script>
+  </body>
+</html>

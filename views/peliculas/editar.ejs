@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Editar Pelicula</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+		label{
+			color:grey;
+		}
+		input[type = "radio"]{ 
+			display:none;
+		}
+		.clasificacion{
+		direction: rtl;/* right to left */
+		unicode-bidi: bidi-override;/* bidi de bidireccional */
+		}
+		label:hover{
+			color:orange;
+		}
+		
+		label:hover ~ label{
+			color:orange;
+		}
+		input[type = "radio"]:checked ~ label{
+			color:orange;
+			}
+
+	</style>
+  </head>
+  <body>
+      <%- include('../navbar'); %>
+      <div class="jumbotron">
+          <h1 class="display-4">Editar Película</h1>
+          <form id = "formularioPelicula">
+            <div class="row">
+              <div class="col">
+                <label for="exampleFormControlInput1">Nombre de película</label>
+                <input type="text" class="form-control" id="name" placeholder="Nombre">
+                <br>
+                <label for="exampleFormControlInput1">Autores</label>
+                <input type="email" class="form-control" id="author" placeholder="@">
+                <br>
+                 <label for="exampleFormControlInput1">Fecha de producción</label>
+                <input type="email" class="form-control" id="productionDate" placeholder="@">
+                <br>
+				<label for="rating">Calificación</label>
+                <p class="clasificacion">
+					<input id="radio1" type="radio" checked=false name="estrellas" value="1"><!--
+					--><label for="radio1">★</label><!--
+					--><input id="radio2" type="radio" checked=false name="estrellas" value="2"><!--
+					--><label for="radio2">★</label><!--
+					--><input id="radio3" type="radio" checked=false name="estrellas" value="3"><!--
+					--><label for="radio3">★</label><!--
+					--><input id="radio4" type="radio" checked=false name="estrellas" value="4"><!--
+					--><label for="radio4">★</label><!--
+					--><input id="radio5" type="radio" checked=false name="estrellas" value="5"><!--
+					--><label for="radio5">★</label>
+				  </p>
+              </div>
+              
+            </div>
+          </form>
+          <br>
+          <button id = "saveMovie" class="btn btn-primary btn-lg" href="#" role="button">Guardar</button>
+          <button onclick = "backtoListMovies()" id = "cancelar" class="btn btn-danger btn-lg" href="#" role="button">Cancelar</button>
+        </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+       function backtoListMovies(){
+        window.location.href = "/peliculas";
+    }
+
+    function getSearchParameters() {
+        var prmstr = window.location.search.substr(1);
+        return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+    }
+
+    function transformToAssocArray( prmstr ) {
+    var params = {};
+    var prmarr = prmstr.split("&");
+    for ( var i = 0; i < prmarr.length; i++) {
+        var tmparr = prmarr[i].split("=");
+        params[tmparr[0]] = tmparr[1];
+    }
+    return params;
+    }
+
+    var params = getSearchParameters();
+
+    console.log(params.id);
+
+    
+
+
+
+    fetch(`/api/movies/${params.id}`,
+    {
+        method: 'GET', 
+        headers:{
+        'Content-Type': 'application/json',
+        'x-access-token': sessionStorage.getItem("token")
+    }})
+    .then(function(response) {
+        return response.text();
+    })
+    .then(function(data) {
+        console.log('data = ', data);
+        movie = JSON.parse(data).data.movie;
+        console.log("product",movie);
+
+        document.getElementById("name").setAttribute("value",movie.tittle);
+        document.getElementById("author").setAttribute("value",movie.author);
+        document.getElementById("productionDate").setAttribute("value",movie.published_at);
+        document.getElementById("radio"+movie.calification).setAttribute("checked",true);
+
+		            var url = `/api/movies/${params.id}`;
+
+        let formularioEditar = document.getElementById("formularioUsuarios");
+
+        let btnSaveMovie = document.getElementById("saveMovie");
+
+        
+
+        btnSaveMovie.addEventListener("click", (e) => {
+		var rating=0;
+				var nodes=document.getElementsByName("estrellas");
+					for (var key in nodes){
+						if(nodes[key].checked){
+							rating=nodes[key].value;
+							break;
+						}
+					}
+			
+				movie = {
+					name:  document.getElementById("name").value,
+					author: document.getElementById("author").value,
+					productionDate:document.getElementById("productionDate").value,
+					email: sessionStorage.getItem('email'),
+					rating: rating
+				}
+
+            var data = movie;
+			console.log(movie);
+            fetch(url, {
+            method: 'PUT', // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers:{
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem("token")
+            }
+            }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response =>{
+                console.log('Success:', response);
+                alert("Se cambiaron los datos de la película");
+                window.location.href = "/peliculas";
+            });
+})
+
+        
+
+
+
+        
+    })
+    .catch(function(err) {
+        console.error(err);
+    });
+
+    </script>
+  </body>
+</html>

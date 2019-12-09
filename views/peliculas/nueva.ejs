@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Nueva Pelicula</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<style>
+		label{
+			color:grey;
+		}
+		input[type = "radio"]{ 
+			display:none;
+		}
+		.clasificacion{
+		direction: rtl;/* right to left */
+		unicode-bidi: bidi-override;/* bidi de bidireccional */
+		}
+		label:hover{
+			color:orange;
+		}
+		
+		label:hover ~ label{
+			color:orange;
+		}
+		input[type = "radio"]:checked ~ label{
+			color:orange;
+			}
+
+	</style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+      <%- include('../navbar'); %>
+    <div class="jumbotron">
+        <h1 class="display-4">Nueva Película</h1>
+        <form>
+            <div class="row">
+              <div class="col">
+                    <label for="exampleFormControlInput1">Nombre de la película</label>
+                <input type="text" class="form-control" id="name" placeholder="Nombre">
+                <br>
+                <label for="cantidad">Autores:</label>
+                <input type="text" id="autores" min="1" class="form-control" >
+                <br>
+                <label for="date">Fecha de producción:</label>
+					<input size="16" type="date" class="form-control" id="fechaProduccion" >
+                <br>
+                <label for="rating">Calificación</label>
+                <p class="clasificacion">
+					<input id="radio1" type="radio" name="estrellas" value="5"><!--
+					--><label for="radio1">★</label><!--
+					--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+					--><label for="radio2">★</label><!--
+					--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+					--><label for="radio3">★</label><!--
+					--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+					--><label for="radio4">★</label><!--
+					--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+					--><label for="radio5">★</label>
+				  </p>
+				 		  <button class="btn btn-primary btn-lg" id="guardarPelicula" href="#" role="button">Guardar</button>
+
+              </div>
+            
+            </div>
+          </form>
+          <br>
+		  <script>
+			 let btnSaveMovie = document.getElementById("guardarPelicula");
+             btnSaveMovie.addEventListener("click", function (event) {
+
+
+				var nombre = document.getElementById("name").value;
+
+				var autores = document.getElementById("autores").value;
+
+				var fechaProduccion = document.getElementById("fechaProduccion").value;
+				var rating=0;
+				var nodes=document.getElementsByName("estrellas");
+				for (var key in nodes){
+					if(nodes[key].checked){
+						rating=nodes[key].value;
+						break;
+					}
+				}
+				event.preventDefault();
+
+				movies = {
+					name: nombre,
+					author: autores,
+					productionDate:fechaProduccion,
+					email: sessionStorage.getItem('email'),
+					rating: rating
+				}
+				console.log(movies);
+				if(nombre.length == 0 || autores.length == 0 || fechaProduccion.value == 0 || rating == 0 ){
+					alert("No se ha introducido correctamente algún valor, favor de verificar");
+				}else{
+				  saveMovie(movies);              
+				}
+				
+			});
+			        let baseUrl = '/api/movies';
+
+			function saveMovie(datos) {
+				console.log(datos);
+				let xhr = new XMLHttpRequest();
+				xhr.open('POST', baseUrl);
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.send([JSON.stringify(datos)]);
+				xhr.onload = function () {
+					if (xhr.status != 200) {
+						alert(xhr.status + ': ' + xhr.statusText);
+					} else {
+						let responseJSON = JSON.parse(xhr.responseText);
+						alert("Pelicula guardada con exito");
+						window.location.href = "/peliculas";
+					}
+				};
+			}
+		  </script>
+      </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
