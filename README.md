@@ -1,20 +1,15 @@
 # Proyecto Web
 
-Proyecto para la materia de Desarrollo de servicios y aplicaciones web ITESO Otoño 2019 .
+Proyecto final para la materia de Desarrollo de servicios y aplicaciones web ITESO Otoño 2019 .
 
-## Descripcion
+## Descripción
 
-Es un pqueño proyecto de un mini sistema para un restaurante
+Aplicación que permite a usuarios guardar, actualizar, eliminar y visualizar sus películas favoritas
 
-## Getting Started
-
-### Dependencies
+### Dependencias
 
 * MongoDb
 * Nodejs
-
-### Installing
-
 
 
 ### Executing program
@@ -22,9 +17,6 @@ Es un pqueño proyecto de un mini sistema para un restaurante
 
 ## Authors
 
-Contributors names and contact info
-
- [@CardeDeveloper](https://github.com/CardeDeveloper)
  [@Jlsraa](https://github.com/Jlsraa)
 
 ## Version History
