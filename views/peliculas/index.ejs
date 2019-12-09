@@ -20,13 +20,8 @@
 		direction: rtl;/* right to left */
 		unicode-bidi: bidi-override;/* bidi de bidireccional */
 		}
-		label:hover{
-			color:orange;
-		}
+	
 		
-		label:hover ~ label{
-			color:orange;
-		}
 		input[type = "radio"]:checked ~ label{
 			color:orange;
 			}
@@ -230,73 +225,74 @@
             }
         }
         function mostrarPeliculas(movie){
+console.log(movie.calification);
 					if(movie.calification==5){
 						var rating=`<p class="clasificacion">
-							<input id="radio1" type="radio" name="estrellas" checked value="5"><!--
+							<input id="radio1" type="radio" disabled name="${movie.tittle}" checked value="5"><!--
 							--><label for="radio1" >★</label><!--
-							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><input id="radio2" type="radio" disabledname="${movie.tittle}" value="4"><!--
 							--><label for="radio2">★</label><!--
-							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><input id="radio3" type="radio" disabledname="${movie.tittle}" value="3"><!--
 							--><label for="radio3">★</label><!--
-							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><input id="radio4" type="radio" disabled name="${movie.tittle}" value="2"><!--
 							--><label for="radio4">★</label><!--
-							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><input id="radio5" type="radio"  disabled name="${movie.tittle}" value="1"><!--
 							--><label for="radio5">★</label>
 						  </p></td>`
 					}
 					if(movie.calification==4){
 						var rating=`<p class="clasificacion">
-							<input id="radio1" type="radio" name="estrellas" value="5"><!--
+							<input id="radio1" type="radio" name="${movie.tittle}" disabled value="5"><!--
 							--><label for="radio1 ">★</label><!--
-							--><input id="radio2" checked type="radio" name="estrellas" value="4"><!--
+							--><input id="radio2" checked type="radio" name="${movie.tittle}" disabled value="4"><!--
 							--><label for="radio2">★</label><!--
-							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><input id="radio3" type="radio" name="${movie.tittle}" disabled value="3"><!--
 							--><label for="radio3">★</label><!--
-							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><input id="radio4" type="radio"  disabled name="${movie.tittle}" value="2"><!--
 							--><label for="radio4">★</label><!--
-							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><input id="radio5" type="radio" disabled name="${movie.tittle}" value="1"><!--
 							--><label for="radio5">★</label>
 						  </p></td>`
 					}
 					if(movie.calification==3){
 						var rating=`<p class="clasificacion">
-							<input id="radio1" type="radio" name="estrellas" value="5"><!--
+							<input id="radio1" type="radio" name="${movie.tittle}" disabled value="5"><!--
 							--><label for="radio1 ">★</label><!--
-							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><input id="radio2" type="radio" name="${movie.tittle}" disabled value="4"><!--
 							--><label for="radio2">★</label><!--
-							--><input id="radio3" checked type="radio" name="estrellas" value="3"><!--
+							--><input id="radio3" checked type="radio" name="${movie.tittle}" disabled value="3"><!--
 							--><label for="radio3">★</label><!--
-							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><input id="radio4" type="radio" name="${movie.tittle}" disabled value="2"><!--
 							--><label for="radio4">★</label><!--
-							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><input id="radio5" type="radio" name="${movie.tittle}" disabled value="1"><!--
 							--><label for="radio5">★</label>
 						  </p></td>`
 					}
 					if(movie.calification==2){
 						var rating=`<p class="clasificacion">
-							<input id="radio1" type="radio" name="estrellas" value="5"><!--
+							<input id="radio1" type="radio" name="${movie.tittle}" disabled value="5"><!--
 							--><label for="radio1 checked">★</label><!--
-							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><input id="radio2" type="radio" name="${movie.tittle}" disabled value="4"><!--
 							--><label for="radio2">★</label><!--
-							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><input id="radio3" type="radio" name="${movie.tittle}" disabled value="3"><!--
 							--><label for="radio3">★</label><!--
-							--><input id="radio4" checked type="radio" name="estrellas" value="2"><!--
+							--><input id="radio4" checked type="radio" name="${movie.tittle}" disabled value="2"><!--
 							--><label for="radio4">★</label><!--
-							--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+							--><input id="radio5" type="radio" name="${movie.tittle}" disabled value="1"><!--
 							--><label for="radio5">★</label>
 						  </p></td>`
 					}
 					if(movie.calification==1){
 						var rating=`<p class="clasificacion">
-							<input id="radio1" type="radio" name="estrellas" checked value="5"><!--
+							<input id="radio1" type="radio" name="${movie.tittle}" disabled checked value="5"><!--
 							--><label for="radio1 ">★</label><!--
-							--><input id="radio2" type="radio" name="estrellas" value="4"><!--
+							--><input id="radio2" type="radio" name="${movie.tittle}" disabled value="4"><!--
 							--><label for="radio2">★</label><!--
-							--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+							--><input id="radio3" type="radio" name="${movie.tittle}" disabled value="3"><!--
 							--><label for="radio3">★</label><!--
-							--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+							--><input id="radio4" type="radio" name="${movie.tittle}" disabled value="2"><!--
 							--><label for="radio4">★</label><!--
-							--><input id="radio5" type="radio" checked name="estrellas" value="1"><!--
+							--><input id="radio5" type="radio" checked name="${movie.tittle}" disabled value="1"><!--
 							--><label for="radio5" >★</label>
 						  </p></td>`
 					}
