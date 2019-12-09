@@ -130,8 +130,9 @@
         function filtrado(event){
             console.log(search.value)
             peliculas = peliculasBackUp.filter((pelicula) => {
-                return pelicula.tittle.toUpperCase().trim().includes(search.value.toUpperCase().trim());
-            })
+                	return( pelicula.tittle.toUpperCase().trim().includes(search.value.toUpperCase().trim()) || pelicula.published_at.trim().includes(search.value.trim()));
+		})
+		//console.log(pelicula.tittle.toUpperCase().trim().includes(search.value.toUpperCase().trim()));
             if(search.value == ""){
 
                 //console.log("Entré if");
@@ -140,7 +141,6 @@
                 cargarPeliculas(peliculas)
                 loadPagination();
                 changePage(1);
-
                 window.location.href = "/peliculas";
                 
 
